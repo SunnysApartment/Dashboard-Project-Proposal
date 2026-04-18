@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Proposal: panksa.com Admin Dashboard</title>
+    
+    <!-- Favicon: Abstract SVG -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%2309090b%22/><rect x=%2225%22 y=%2225%22 width=%2220%22 height=%2250%22 rx=%224%22 fill=%22%230ea5e9%22/><rect x=%2255%22 y=%2245%22 width=%2220%22 height=%2230%22 rx=%224%22 fill=%22%23a855f7%22/></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        ar: ['Cairo', 'sans-serif'],
+                        en: ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        brand: { 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7' }, // Blue
+                        accent: { 400: '#c084fc', 500: '#a855f7', 600: '#9333ea' }, // Purple
+                        success: { 400: '#34d399', 500: '#10b981' }, // Green
+                        zinc: { 800: '#27272a', 900: '#18181b', 950: '#09090b' }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #09090b; /* Zinc 950 */
+            color: #d4d4d8; /* Zinc 300 */
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 0px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+
+        /* Sleek Panels */
+        .sleek-panel {
+            background: #18181b; /* Zinc 900 */
+            border: 1px solid #27272a; /* Zinc 800 */
+            transition: all 0.3s ease;
+        }
+        .sleek-panel:hover { border-color: #3f3f46; }
+
+        /* Technical Background Pattern */
+        .bg-grid {
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        /* Animation Delays */
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        
+        .section-number {
+            font-family: monospace;
+            letter-spacing: 0.1em;
+        }
+
+        /* Language Toggle Button */
+        .lang-btn {
+            backdrop-filter: blur(8px);
+            background: rgba(24, 24, 27, 0.8);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-zinc-800 selection:text-white relative bg-grid font-en">
+
+    <!-- Global Header with Logo and Language Switcher -->
+    <nav class="absolute top-0 left-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
+            <img src="https://i.postimg.cc/8CCP2PfD/Chat-GPT-Image-Apr-18-2026-05-05-59-AM.png" alt="Panksa Logo" class="h-10 md:h-12 w-auto object-contain">
+            <button id="langToggle" class="lang-btn border border-zinc-700 hover:border-brand-500 text-white px-5 py-2 rounded-full font-bold shadow-lg transition-all flex items-center gap-2 text-xs uppercase tracking-wider">
+                التبديل للعربية
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- ARABIC CONTENT (PRO ARABIC)               -->
+    <!-- ========================================== -->
+    <div id="content-ar" class="hidden" dir="rtl">
+        <header class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center min-h-[50vh] border-b border-zinc-800">
+            <div class="relative z-10 text-center max-w-5xl mx-auto">
+                <div class="inline-block border border-zinc-800 px-6 py-2 mb-8 animate-fade-in-up">
+                    <span class="text-xs font-bold tracking-widest text-zinc-400 uppercase">Executive Proposal & Technical Report</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-black mb-8 leading-tight tracking-tight animate-fade-in-up delay-100 text-white">
+                    مقترح مشروع تطوير <br />
+                    <span class="inline-block mt-4 text-3xl md:text-5xl text-zinc-500 font-light">
+                        النظام الخلفي ولوحة تحكم <span class="text-brand-400 font-bold">Panksa.com</span>
+                    </span>
+                </h1>
+                
+                <p class="text-lg text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light animate-fade-in-up delay-200">
+                    رؤية هندسية ومالية لتطوير لوحة تحكم مخصصة قابلة للتوسع، لتحويل الموقع الحالي إلى منصة رقمية متكاملة مدعومة بواجهات برمجة التطبيقات (API).
+                </p>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-20 space-y-32">
+            
+            <!-- 1. Executive Summary & Analysis -->
+            <section class="animate-fade-in-up opacity-0 delay-100">
+                <div class="mb-12 border-b border-zinc-800 pb-6">
+                    <span class="section-number text-zinc-500 text-sm block mb-2">01. EXECUTIVE SUMMARY & ANALYSIS</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-white">الملخص التنفيذي وتحليل الوضع الحالي</h2>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="sleek-panel p-8 border-s-4 border-s-brand-500">
+                        <h3 class="text-xl font-bold text-white mb-4">هدف المشروع</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+                            يهدف هذا المشروع إلى بناء لوحة تحكم إدارية مخصصة (Backoffice System) لإدارة وتشغيل الموقع بكفاءة عالية. سيقوم هذا الحل بتحويل الموقع الحالي إلى منصة مرنة مبنية على واجهات (API).
+                        </p>
+                        <ul class="space-y-3 text-sm text-zinc-300">
+                            <li class="flex items-start gap-3"><span class="text-brand-400 mt-1">✔</span> تحكم كامل بالمحتوى (أكثر مرونة من WordPress).</li>
+                            <li class="flex items-start gap-3"><span class="text-brand-400 mt-1">✔</span> إدارة العمليات التجارية (المستخدمين، العملاء المحتملين، الإحصائيات).</li>
+                            <li class="flex items-start gap-3"><span class="text-brand-400 mt-1">✔</span> أداء عالٍ وقابلية فائقة للتوسع (التوسع لتطبيقات الجوال أو نظام SaaS لاحقاً).</li>
+                        </ul>
+                    </div>
+
+                    <div class="sleek-panel p-8">
+                        <h3 class="text-xl font-bold text-white mb-4">تحليل الموقع الحالي</h3>
+                        <div class="space-y-4 text-sm text-zinc-400">
+                            <div class="p-4 bg-zinc-900/50 border border-zinc-800 rounded">
+                                <span class="block text-brand-400 font-bold mb-1">النية التحتية والملاحظات:</span>
+                                تطبيق ويب حديث ومخصص، لا يستخدم أنظمة إدارة محتوى جاهزة (CMS). يعتمد على JavaScript SPA، وشبكة Cloudflare، مع خلفية برمجية غير مكشوفة.
+                            </div>
+                            <div class="flex items-start gap-3 text-rose-400 font-semibold p-2">
+                                <span>👉</span> النظام يتطلب لوحة تحكم مخصصة بالكامل (Dedicated Dashboard) وليس مجرد إضافة أو نظام جاهز.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Tech Stack & Solution -->
+            <section class="animate-fade-in-up opacity-0 delay-200">
+                <div class="mb-12 border-b border-zinc-800 pb-6 flex justify-between items-end">
+                    <div>
+                        <span class="section-number text-zinc-500 text-sm block mb-2">02. ARCHITECTURE & TECH STACK</span>
+                        <h2 class="text-3xl font-black text-white">الحل المقترح وحزمة التقنيات</h2>
+                    </div>
+                </div>
+
+                <!-- Headless Concept -->
+                <div class="sleek-panel p-8 mb-8 text-center bg-zinc-900 border-zinc-700">
+                    <p class="text-xs font-bold tracking-widest text-accent-400 uppercase mb-4">المفهوم الأساسي</p>
+                    <h3 class="text-2xl font-black text-white mb-6">بناء معمارية لوحة تحكم مفصولة (Headless System)</h3>
+                    <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-sm font-mono text-zinc-300">
+                        <div class="px-6 py-3 border border-zinc-700 bg-zinc-950">Dashboard Panel</div>
+                        <span class="text-zinc-600 hidden md:inline">→</span><span class="text-zinc-600 md:hidden">↓</span>
+                        <div class="px-6 py-3 border border-brand-500 text-brand-400 bg-brand-900/10">API Layer (Logic)</div>
+                        <span class="text-zinc-600 hidden md:inline">→</span><span class="text-zinc-600 md:hidden">↓</span>
+                        <div class="px-6 py-3 border border-zinc-700 bg-zinc-950">Database</div>
+                        <span class="text-zinc-600 hidden md:inline">→</span><span class="text-zinc-600 md:hidden">↓</span>
+                        <div class="px-6 py-3 border border-zinc-700 bg-zinc-950">Website Frontend</div>
+                    </div>
+                </div>
+
+                <!-- Tech Grid -->
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="border border-zinc-800 p-6 hover:bg-zinc-900 transition">
+                        <div class="text-brand-400 mb-3 text-2xl font-black">Backend</div>
+                        <ul class="text-zinc-400 text-sm space-y-2">
+                            <li>ASP.NET Core</li>
+                            <li>Entity Framework Core</li>
+                            <li>JWT Authentication</li>
+                        </ul>
+                    </div>
+                    <div class="border border-zinc-800 p-6 hover:bg-zinc-900 transition">
+                        <div class="text-accent-400 mb-3 text-2xl font-black">Frontend</div>
+                        <ul class="text-zinc-400 text-sm space-y-2">
+                            <li>React + TypeScript</li>
+                            <li>Tailwind CSS</li>
+                        </ul>
+                    </div>
+                    <div class="border border-zinc-800 p-6 hover:bg-zinc-900 transition">
+                        <div class="text-success-400 mb-3 text-2xl font-black">Database</div>
+                        <ul class="text-zinc-400 text-sm space-y-2">
+                            <li>PostgreSQL</li>
+                            <li>Relational Architecture</li>
+                        </ul>
+                    </div>
+                    <div class="border border-zinc-800 p-6 hover:bg-zinc-900 transition">
+                        <div class="text-zinc-300 mb-3 text-2xl font-black">Infrastructure</div>
+                        <ul class="text-zinc-400 text-sm space-y-2">
+                            <li>Cloudflare</li>
+                            <li>Docker Deployment</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Features -->
+            <section class="animate-fade-in-up opacity-0 delay-200">
+                <div class="mb-12 border-b border-zinc-800 pb-6">
+                    <span class="section-number text-zinc-500 text-sm block mb-2">03. SYSTEM FEATURES</span>
+                    <h2 class="text-3xl font-black text-white">خصائص النظام الأساسية والمتقدمة</h2>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6 mb-10">
+                    <!-- Feature Cards -->
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">1. المصادقة والصلاحيات 🔐</h4>
+                        <p class="text-zinc-400 text-xs">نظام تسجيل دخول آمن، وصلاحيات مبنية على الأدوار (مسؤول، محرر، دعم).</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">2. لوحة القياس والإحصائيات 📊</h4>
+                        <p class="text-zinc-400 text-xs">نظرة عامة على أداء الموقع، إحصائيات الزوار، وتتبع معدلات التحويل.</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-brand-500">
+                        <h4 class="text-white font-bold mb-2">3. إدارة المحتوى (CMS) 🧾</h4>
+                        <p class="text-zinc-400 text-xs">بديل كامل لنظام ووردبريس. إدارة الصفحات ديناميكياً، وتعديل الأقسام ومكتبة الوسائط.</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">4. إدارة المستخدمين 👥</h4>
+                        <p class="text-zinc-400 text-xs">إدارة حسابات المستخدمين، تعيين الأدوار، وتتبع نشاط الحسابات.</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">5. إدارة طلبات العملاء 📩</h4>
+                        <p class="text-zinc-400 text-xs">عرض وتتبع طلبات العملاء (Leads)، تغيير الحالات، وإضافة ملاحظات داخلية.</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">6. إعدادات النظام ⚙️</h4>
+                        <p class="text-zinc-400 text-xs">التحكم في إعدادات الـ SEO، ألوان وشعارات العلامة التجارية، وربط الـ APIs.</p>
+                    </div>
+                </div>
+
+                <!-- Advanced Features -->
+                <div class="sleek-panel border-s-4 border-s-accent-500 p-8 flex flex-col md:flex-row gap-8 items-center bg-[#130f1a]">
+                    <div class="md:w-1/3">
+                        <span class="text-accent-400 text-xs font-bold uppercase tracking-widest mb-2 block">High Value</span>
+                        <h3 class="text-2xl font-black text-white">خصائص متقدمة تميز النظام</h3>
+                    </div>
+                    <div class="md:w-2/3 grid sm:grid-cols-2 gap-4 text-sm text-zinc-300">
+                        <div class="flex items-center gap-2">✅ مسودات / نشر المحتوى المجدول</div>
+                        <div class="flex items-center gap-2">✅ سجل التعديلات (إمكانية التراجع)</div>
+                        <div class="flex items-center gap-2">✅ Feature Flags (تفعيل/إلغاء الميزات)</div>
+                        <div class="flex items-center gap-2">✅ جاهزية تامة للتحول إلى نظام SaaS</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Pricing & Phases -->
+            <section class="animate-fade-in-up opacity-0 delay-300">
+                <div class="mb-12 border-b border-zinc-800 pb-6 flex flex-col md:flex-row justify-between md:items-end">
+                    <div>
+                        <span class="section-number text-zinc-500 text-sm block mb-2">04. TIMELINE & INVESTMENT</span>
+                        <h2 class="text-3xl font-black text-white">الجدول الزمني وعروض الاستثمار</h2>
+                    </div>
+                    <p class="text-zinc-400 text-sm mt-4 md:mt-0 font-mono">المدة الإجمالية للتنفيذ: 10 - 12 أسبوع</p>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6">
+                    
+                    <!-- Option 1 -->
+                    <div class="sleek-panel p-8 border-t-4 border-t-zinc-600 flex flex-col">
+                        <h3 class="text-xl font-bold text-white mb-2">الخيار 1: نسخة MVP</h3>
+                        <p class="text-zinc-500 text-xs mb-6 pb-6 border-b border-zinc-800">لوحة تحكم أساسية تضم الخصائص الجوهرية فقط.</p>
+                        <ul class="text-sm text-zinc-300 space-y-3 mb-8 flex-grow">
+                            <li>- نظام المصادقة (Auth)</li>
+                            <li>- إدارة المحتوى الأساسية (CMS)</li>
+                            <li>- إدارة المستخدمين</li>
+                            <li>- إحصائيات مبدئية</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <span class="block text-zinc-500 text-xs uppercase mb-1">الاستثمار المتوقع</span>
+                            <span class="text-2xl font-mono text-white font-bold">$2,500 – $3,500</span>
+                        </div>
+                    </div>
+
+                    <!-- Option 2 (Recommended) -->
+                    <div class="sleek-panel p-8 border-t-4 border-t-brand-500 flex flex-col relative shadow-2xl shadow-brand-900/20 transform lg:-translate-y-4 bg-[#0a151f]">
+                        <div class="absolute top-0 right-0 bg-brand-500 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-wider">الخيار الموصى به</div>
+                        <h3 class="text-2xl font-black text-brand-400 mb-2 mt-2">الخيار 2: النظام المتكامل</h3>
+                        <p class="text-zinc-400 text-xs mb-6 pb-6 border-b border-zinc-800">النظام الشامل لتحقيق أعلى كفاءة تشغيلية وقابلية للتوسع.</p>
+                        <ul class="text-sm text-zinc-200 space-y-3 mb-8 flex-grow font-medium">
+                            <li class="flex gap-2"><span class="text-brand-500">✔</span> جميع الوحدات والميزات الأساسية</li>
+                            <li class="flex gap-2"><span class="text-brand-500">✔</span> الخصائص المتقدمة (تاريخ التعديلات، إلخ)</li>
+                            <li class="flex gap-2"><span class="text-brand-500">✔</span> معمارية برمجية قابلة للتوسع الفوري</li>
+                            <li class="flex gap-2"><span class="text-brand-500">✔</span> نظام الإشعارات والسجلات التفصيلية</li>
+                        </ul>
+                        <div class="mt-auto pt-4 border-t border-zinc-800">
+                            <span class="block text-zinc-500 text-xs uppercase mb-1">الاستثمار المتوقع</span>
+                            <span class="text-3xl font-mono text-white font-black">$5,000 – $7,500</span>
+                        </div>
+                    </div>
+
+                    <!-- Option 3 -->
+                    <div class="sleek-panel p-8 border-t-4 border-t-accent-500 flex flex-col">
+                        <h3 class="text-xl font-bold text-white mb-2">الخيار 3: مستوى المؤسسات</h3>
+                        <p class="text-zinc-500 text-xs mb-6 pb-6 border-b border-zinc-800">جاهزية تامة كنظام SaaS وتوسع استراتيجي ضخم.</p>
+                        <ul class="text-sm text-zinc-300 space-y-3 mb-8 flex-grow">
+                            <li>- نظام متعدد المستأجرين (Multi-tenant)</li>
+                            <li>- تحليلات بيانات متقدمة ومعمقة</li>
+                            <li>- بنية تحتية لتحمل الضغط العالي جداً</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <span class="block text-zinc-500 text-xs uppercase mb-1">الاستثمار المتوقع</span>
+                            <span class="text-2xl font-mono text-white font-bold">$8,000 – $12,000</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 5. Strategy Alert & Deliverables -->
+            <section class="animate-fade-in-up opacity-0 delay-400">
+                <div class="sleek-panel border-s-4 border-s-rose-600 p-8 md:p-12 mb-12">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-6">
+                        <div>
+                            <span class="text-xs font-bold tracking-widest text-rose-500 uppercase mb-2 block">Strategic Insight</span>
+                            <h2 class="text-3xl font-black text-white">هذه ليست مجرد لوحة تحكم!</h2>
+                        </div>
+                    </div>
+                    
+                    <p class="text-zinc-300 text-lg leading-relaxed mb-6">
+                        هذا المشروع يمثل <strong class="text-white">تأسيساً لمنصة رقمية متكاملة</strong>. بناء النظام بهذه الطريقة سيمكنكم مستقبلاً من:
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-4 text-sm text-zinc-400 font-medium">
+                        <div class="bg-zinc-900 p-4 border border-zinc-800 rounded">أتمتة العمليات التجارية بالكامل</div>
+                        <div class="bg-zinc-900 p-4 border border-zinc-800 rounded">إطلاق تطبيقات جوال اعتماداً على نفس الـ API</div>
+                        <div class="bg-zinc-900 p-4 border border-zinc-800 rounded">التحول إلى نظام SaaS للمستخدمين الآخرين</div>
+                    </div>
+
+                    <div class="mt-10 pt-6 border-t border-zinc-800">
+                        <p class="text-sm text-zinc-300">
+                            <span class="text-rose-500 font-bold ml-2">التوصية النهائية:</span> 
+                            المضي قدماً في <strong class="text-white">الخيار 2 (النظام المتكامل)</strong> لأنه يوفر التوازن المثالي بين التكلفة، الأداء، والتوسع المستقبلي.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="border border-zinc-800 p-6 flex flex-wrap gap-4 text-sm text-zinc-400 justify-center bg-[#0c0c0e]">
+                    <span class="text-white font-bold">المخرجات النهائية:</span>
+                    <span>✔️ لوحة تحكم فعالة</span>
+                    <span class="text-zinc-700">|</span>
+                    <span>✔️ نظام API متكامل</span>
+                    <span class="text-zinc-700">|</span>
+                    <span>✔️ معمارية قاعدة بيانات</span>
+                    <span class="text-zinc-700">|</span>
+                    <span>✔️ إعداد الاستضافة (Docker)</span>
+                    <span class="text-zinc-700">|</span>
+                    <span>✔️ توثيق برمجي كامل (Documentation)</span>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ENGLISH CONTENT (LTR)                      -->
+    <!-- ========================================== -->
+    <div id="content-en" class="block font-en" dir="ltr">
+        <header class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center min-h-[50vh] border-b border-zinc-800">
+            <div class="relative z-10 text-center max-w-5xl mx-auto">
+                <div class="inline-block border border-zinc-800 px-6 py-2 mb-8 animate-fade-in-up">
+                    <span class="text-xs font-bold tracking-widest text-zinc-400 uppercase">Executive Proposal & Technical Report</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-black mb-8 leading-tight tracking-tight animate-fade-in-up delay-100 text-white">
+                    Project Proposal <br />
+                    <span class="inline-block mt-4 text-3xl md:text-5xl text-zinc-500 font-light">
+                        Admin Dashboard & Backend for <span class="text-brand-400 font-bold">Panksa.com</span>
+                    </span>
+                </h1>
+                
+                <p class="text-lg text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light animate-fade-in-up delay-200">
+                    A comprehensive technical and financial approach to building a custom, scalable backoffice system, transforming the current website into an API-driven platform.
+                </p>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-20 space-y-32">
+            
+            <!-- 1. Executive Summary & Analysis -->
+            <section class="animate-fade-in-up opacity-0 delay-100">
+                <div class="mb-12 border-b border-zinc-800 pb-6">
+                    <span class="section-number text-zinc-500 text-sm block mb-2">01. EXECUTIVE SUMMARY & ANALYSIS</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-white">Executive Summary & Current State</h2>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="sleek-panel p-8 border-l-4 border-l-brand-500">
+                        <h3 class="text-xl font-bold text-white mb-4">Project Objective</h3>
+                        <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+                            This project aims to build a custom administrative dashboard (Backoffice System) to manage and operate the website efficiently. The solution will transform the current website into a scalable, API-driven platform.
+                        </p>
+                        <ul class="space-y-3 text-sm text-zinc-300">
+                            <li class="flex items-start gap-3"><span class="text-brand-400 mt-1">✔</span> Full content control (like WordPress, but much more flexible).</li>
+                            <li class="flex items-start gap-3"><span class="text-brand-400 mt-1">✔</span> Business operations management (users, leads, analytics).</li>
+                            <li class="flex items-start gap-3"><span class="text-brand-400 mt-1">✔</span> High performance and scalability for future expansion (Mobile/SaaS).</li>
+                        </ul>
+                    </div>
+
+                    <div class="sleek-panel p-8">
+                        <h3 class="text-xl font-bold text-white mb-4">Current Website Analysis</h3>
+                        <div class="space-y-4 text-sm text-zinc-400">
+                            <div class="p-4 bg-zinc-900/50 border border-zinc-800 rounded">
+                                <span class="block text-brand-400 font-bold mb-1">Infrastructure Observations:</span>
+                                Custom-built modern web application. Not using a traditional CMS. Frontend is a JavaScript SPA with Cloudflare infrastructure and an internal API-driven backend.
+                            </div>
+                            <div class="flex items-start gap-3 text-rose-400 font-semibold p-2">
+                                <span>👉</span> Implication: The system requires a dedicated, custom-built dashboard, not a simple CMS plugin.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Tech Stack & Solution -->
+            <section class="animate-fade-in-up opacity-0 delay-200">
+                <div class="mb-12 border-b border-zinc-800 pb-6 flex justify-between items-end">
+                    <div>
+                        <span class="section-number text-zinc-500 text-sm block mb-2">02. ARCHITECTURE & TECH STACK</span>
+                        <h2 class="text-3xl font-black text-white">Proposed Solution & Technologies</h2>
+                    </div>
+                </div>
+
+                <!-- Headless Concept -->
+                <div class="sleek-panel p-8 mb-8 text-center bg-zinc-900 border-zinc-700">
+                    <p class="text-xs font-bold tracking-widest text-accent-400 uppercase mb-4">Core Concept</p>
+                    <h3 class="text-2xl font-black text-white mb-6">Build a Headless Admin Dashboard System</h3>
+                    <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-sm font-mono text-zinc-300">
+                        <div class="px-6 py-3 border border-zinc-700 bg-zinc-950">Dashboard Panel</div>
+                        <span class="text-zinc-600 hidden md:inline">→</span><span class="text-zinc-600 md:hidden">↓</span>
+                        <div class="px-6 py-3 border border-brand-500 text-brand-400 bg-brand-900/10">API Layer (Logic)</div>
+                        <span class="text-zinc-600 hidden md:inline">→</span><span class="text-zinc-600 md:hidden">↓</span>
+                        <div class="px-6 py-3 border border-zinc-700 bg-zinc-950">Database</div>
+                        <span class="text-zinc-600 hidden md:inline">→</span><span class="text-zinc-600 md:hidden">↓</span>
+                        <div class="px-6 py-3 border border-zinc-700 bg-zinc-950">Website Frontend</div>
+                    </div>
+                </div>
+
+                <!-- Tech Grid -->
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="border border-zinc-800 p-6 hover:bg-zinc-900 transition">
+                        <div class="text-brand-400 mb-3 text-2xl font-black">Backend</div>
+                        <ul class="text-zinc-400 text-sm space-y-2">
+                            <li>ASP.NET Core</li>
+                            <li>Entity Framework Core</li>
+                            <li>JWT Authentication</li>
+                        </ul>
+                    </div>
+                    <div class="border border-zinc-800 p-6 hover:bg-zinc-900 transition">
+                        <div class="text-accent-400 mb-3 text-2xl font-black">Frontend</div>
+                        <ul class="text-zinc-400 text-sm space-y-2">
+                            <li>React + TypeScript</li>
+                            <li>Tailwind CSS</li>
+                        </ul>
+                    </div>
+                    <div class="border border-zinc-800 p-6 hover:bg-zinc-900 transition">
+                        <div class="text-success-400 mb-3 text-2xl font-black">Database</div>
+                        <ul class="text-zinc-400 text-sm space-y-2">
+                            <li>PostgreSQL</li>
+                            <li>Relational Architecture</li>
+                        </ul>
+                    </div>
+                    <div class="border border-zinc-800 p-6 hover:bg-zinc-900 transition">
+                        <div class="text-zinc-300 mb-3 text-2xl font-black">Infrastructure</div>
+                        <ul class="text-zinc-400 text-sm space-y-2">
+                            <li>Cloudflare</li>
+                            <li>Docker Deployment</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Features -->
+            <section class="animate-fade-in-up opacity-0 delay-200">
+                <div class="mb-12 border-b border-zinc-800 pb-6">
+                    <span class="section-number text-zinc-500 text-sm block mb-2">03. SYSTEM FEATURES</span>
+                    <h2 class="text-3xl font-black text-white">Core & Advanced Capabilities</h2>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6 mb-10">
+                    <!-- Feature Cards -->
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">1. Authentication & Roles 🔐</h4>
+                        <p class="text-zinc-400 text-xs">Secure login system with Role-based access (Admin, Editor, Support).</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">2. Main Dashboard 📊</h4>
+                        <p class="text-zinc-400 text-xs">Visitors statistics, performance overview, and conversion tracking.</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-brand-500">
+                        <h4 class="text-white font-bold mb-2">3. Content Management (CMS) 🧾</h4>
+                        <p class="text-zinc-400 text-xs">Manage pages dynamically, edit sections, and handle the media library. Fully replaces WordPress.</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">4. User Management 👥</h4>
+                        <p class="text-zinc-400 text-xs">Manage registered users, assign specific roles, and track activity logs.</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">5. Leads Management 📩</h4>
+                        <p class="text-zinc-400 text-xs">View customer requests, update tracking status, and manage internal notes.</p>
+                    </div>
+                    <div class="sleek-panel p-6 border-t-2 border-zinc-700">
+                        <h4 class="text-white font-bold mb-2">6. Settings Panel ⚙️</h4>
+                        <p class="text-zinc-400 text-xs">Global SEO controls, branding updates (logos, colors), and API integrations.</p>
+                    </div>
+                </div>
+
+                <!-- Advanced Features -->
+                <div class="sleek-panel border-l-4 border-l-accent-500 p-8 flex flex-col md:flex-row gap-8 items-center bg-[#130f1a]">
+                    <div class="md:w-1/3">
+                        <span class="text-accent-400 text-xs font-bold uppercase tracking-widest mb-2 block">High Value</span>
+                        <h3 class="text-2xl font-black text-white">Advanced Differentiators</h3>
+                    </div>
+                    <div class="md:w-2/3 grid sm:grid-cols-2 gap-4 text-sm text-zinc-300">
+                        <div class="flex items-center gap-2">✅ Draft / Publish Content System</div>
+                        <div class="flex items-center gap-2">✅ Version History (Rollback capability)</div>
+                        <div class="flex items-center gap-2">✅ Feature Flags (Enable/Disable live features)</div>
+                        <div class="flex items-center gap-2">✅ API-first & SaaS Ready Architecture</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Pricing & Phases -->
+            <section class="animate-fade-in-up opacity-0 delay-300">
+                <div class="mb-12 border-b border-zinc-800 pb-6 flex flex-col md:flex-row justify-between md:items-end">
+                    <div>
+                        <span class="section-number text-zinc-500 text-sm block mb-2">04. TIMELINE & INVESTMENT</span>
+                        <h2 class="text-3xl font-black text-white">Estimation & Pricing Models</h2>
+                    </div>
+                    <p class="text-zinc-400 text-sm mt-4 md:mt-0 font-mono">Total Estimated Timeline: 10 - 12 Weeks</p>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6">
+                    
+                    <!-- Option 1 -->
+                    <div class="sleek-panel p-8 border-t-4 border-t-zinc-600 flex flex-col">
+                        <h3 class="text-xl font-bold text-white mb-2">Option 1: MVP Version</h3>
+                        <p class="text-zinc-500 text-xs mb-6 pb-6 border-b border-zinc-800">Basic dashboard with core functional features.</p>
+                        <ul class="text-sm text-zinc-300 space-y-3 mb-8 flex-grow">
+                            <li>- Authentication System</li>
+                            <li>- Basic CMS functionality</li>
+                            <li>- User Management</li>
+                            <li>- Basic Analytics</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <span class="block text-zinc-500 text-xs uppercase mb-1">Estimated Investment</span>
+                            <span class="text-2xl font-mono text-white font-bold">$2,500 – $3,500</span>
+                        </div>
+                    </div>
+
+                    <!-- Option 2 (Recommended) -->
+                    <div class="sleek-panel p-8 border-t-4 border-t-brand-500 flex flex-col relative shadow-2xl shadow-brand-900/20 transform lg:-translate-y-4 bg-[#0a151f]">
+                        <div class="absolute top-0 right-0 bg-brand-500 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-wider">Recommended</div>
+                        <h3 class="text-2xl font-black text-brand-400 mb-2 mt-2">Option 2: Full System</h3>
+                        <p class="text-zinc-400 text-xs mb-6 pb-6 border-b border-zinc-800">Comprehensive system balancing performance and scalability.</p>
+                        <ul class="text-sm text-zinc-200 space-y-3 mb-8 flex-grow font-medium">
+                            <li class="flex gap-2"><span class="text-brand-500">✔</span> All Core Modules</li>
+                            <li class="flex gap-2"><span class="text-brand-500">✔</span> Advanced features (Version history, etc.)</li>
+                            <li class="flex gap-2"><span class="text-brand-500">✔</span> Highly scalable API architecture</li>
+                            <li class="flex gap-2"><span class="text-brand-500">✔</span> Full notification & Logging systems</li>
+                        </ul>
+                        <div class="mt-auto pt-4 border-t border-zinc-800">
+                            <span class="block text-zinc-500 text-xs uppercase mb-1">Estimated Investment</span>
+                            <span class="text-3xl font-mono text-white font-black">$5,000 – $7,500</span>
+                        </div>
+                    </div>
+
+                    <!-- Option 3 -->
+                    <div class="sleek-panel p-8 border-t-4 border-t-accent-500 flex flex-col">
+                        <h3 class="text-xl font-bold text-white mb-2">Option 3: Enterprise</h3>
+                        <p class="text-zinc-500 text-xs mb-6 pb-6 border-b border-zinc-800">SaaS ready architecture for massive scale.</p>
+                        <ul class="text-sm text-zinc-300 space-y-3 mb-8 flex-grow">
+                            <li>- Multi-tenant architecture</li>
+                            <li>- Advanced data analytics</li>
+                            <li>- High availability & scalability setup</li>
+                        </ul>
+                        <div class="mt-auto">
+                            <span class="block text-zinc-500 text-xs uppercase mb-1">Estimated Investment</span>
+                            <span class="text-2xl font-mono text-white font-bold">$8,000 – $12,000</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 5. Strategy Alert & Deliverables -->
+            <section class="animate-fade-in-up opacity-0 delay-400">
+                <div class="sleek-panel border-l-4 border-l-rose-600 p-8 md:p-12 mb-12">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-6">
+                        <div>
+                            <span class="text-xs font-bold tracking-widest text-rose-500 uppercase mb-2 block">Strategic Insight</span>
+                            <h2 class="text-3xl font-black text-white">More Than Just a Dashboard</h2>
+                        </div>
+                    </div>
+                    
+                    <p class="text-zinc-300 text-lg leading-relaxed mb-6">
+                        This project is not just a standard control panel. <strong class="text-white">It is a foundation for a full digital platform.</strong> Building it right enables:
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-4 text-sm text-zinc-400 font-medium">
+                        <div class="bg-zinc-900 p-4 border border-zinc-800 rounded">Full Business Automation</div>
+                        <div class="bg-zinc-900 p-4 border border-zinc-800 rounded">Seamless Mobile App Expansions</div>
+                        <div class="bg-zinc-900 p-4 border border-zinc-800 rounded">Long-Term SaaS Transformation</div>
+                    </div>
+
+                    <div class="mt-10 pt-6 border-t border-zinc-800">
+                        <p class="text-sm text-zinc-300">
+                            <span class="text-rose-500 font-bold mr-2">Final Recommendation:</span> 
+                            Proceed with <strong class="text-white">Option 2 (Full System)</strong> for the best balance between cost, immediate value, and long-term scalability.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="border border-zinc-800 p-6 flex flex-wrap gap-4 text-sm text-zinc-400 justify-center bg-[#0c0c0e]">
+                    <span class="text-white font-bold">Project Deliverables:</span>
+                    <span>✔️ Fully Functional Dashboard</span>
+                    <span class="text-zinc-700">|</span>
+                    <span>✔️ Backend API System</span>
+                    <span class="text-zinc-700">|</span>
+                    <span>✔️ DB Architecture</span>
+                    <span class="text-zinc-700">|</span>
+                    <span>✔️ Docker Setup</span>
+                    <span class="text-zinc-700">|</span>
+                    <span>✔️ Complete Documentation</span>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-20 border-t border-zinc-900 bg-[#09090b]">
+        <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex flex-col gap-2 items-center md:items-start text-center md:text-start" id="footer-text">
+                <!-- Text updated via JS -->
+                <p class="text-zinc-600 text-xs ar-text hidden">تم إعداد هذه الوثيقة كعرض فني ومالي لمشروع تطوير النظام الخلفي.</p>
+                <p class="text-zinc-600 text-xs en-text">This document was prepared as a technical and financial proposal for the backend development project.</p>
+            </div>
+            <div class="flex items-center gap-2 mt-4 md:mt-0">
+                <p class="text-zinc-500 text-xs font-bold tracking-widest uppercase" style="direction: ltr;">
+                    Copyright &copy; 2026. <a href="#" class="text-zinc-400 hover:text-white transition-colors underline decoration-zinc-700 underline-offset-4 font-semibold">Khaled Omar</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Reveal Animation & Language Logic -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // --- 1. Intersection Observer for Animations ---
+            function initObserver() {
+                const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+                const observer = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.animationPlayState = 'running';
+                            entry.target.classList.add('animate-fade-in-up');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+
+                const elements = document.querySelectorAll('.opacity-0');
+                elements.forEach(el => {
+                    el.style.animationPlayState = 'paused'; 
+                    observer.observe(el);
+                });
+            }
+            initObserver();
+
+            // --- 2. Language Toggle Logic ---
+            const btn = document.getElementById('langToggle');
+            const arContent = document.getElementById('content-ar');
+            const enContent = document.getElementById('content-en');
+            const arFooter = document.querySelector('.ar-text');
+            const enFooter = document.querySelector('.en-text');
+            let currentLang = 'en';
+
+            btn.addEventListener('click', () => {
+                if(currentLang === 'en') {
+                    // Switch to AR
+                    currentLang = 'ar';
+                    document.documentElement.lang = 'ar';
+                    document.documentElement.dir = 'rtl';
+                    document.body.classList.remove('font-en');
+                    document.body.classList.add('font-ar');
+                    
+                    enContent.classList.add('hidden');
+                    enContent.classList.remove('block');
+                    arContent.classList.remove('hidden');
+                    arContent.classList.add('block');
+                    
+                    enFooter.classList.add('hidden');
+                    arFooter.classList.remove('hidden');
+
+                    btn.innerHTML = 'Switch to English';
+                } else {
+                    // Switch to EN
+                    currentLang = 'en';
+                    document.documentElement.lang = 'en';
+                    document.documentElement.dir = 'ltr';
+                    document.body.classList.remove('font-ar');
+                    document.body.classList.add('font-en');
+                    
+                    arContent.classList.add('hidden');
+                    arContent.classList.remove('block');
+                    enContent.classList.remove('hidden');
+                    enContent.classList.add('block');
+                    
+                    arFooter.classList.add('hidden');
+                    enFooter.classList.remove('hidden');
+
+                    btn.innerHTML = 'التبديل للعربية';
+                }
+                
+                // Re-trigger animations for the new visible sections
+                initObserver();
+            });
+        });
+    </script>
+</body>
+</html>
